@@ -10,7 +10,10 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    
+    let loginVC = LoginVC()
+    let onboardingVC = OnboardingVC()
+    let dummyVC = DummyVC()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -21,7 +24,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        window?.rootViewController = LoginVC()
+        window?.rootViewController =  dummyVC
+        
+        loginVC.delegate = self
+        onboardingVC.delegate = self
     }
 
     
@@ -57,3 +63,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+extension SceneDelegate: LoginVCDelegate {
+    func didLogin() {
+        setRootViewController(onboardingVC)
+        
+    }
+    
+    
+}
+
+extension SceneDelegate: OnboardingVCDelegate {
+    func didFinishOnboarding() {
+         print("done")
+    }
+}
+
+extension SceneDelegate {
+    func setRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard animated, let window = self.window else {
+            self.window?.rootViewController = vc
+            self.window?.makeKeyAndVisible()
+            return
+        }
+        
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+    }
+}

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol LoginVCDelegate: AnyObject {
+    func didLogin()
+}
+
 class LoginVC: UIViewController {
     let signInButton = UIButton(type: .system)
     let loginView = LoginView()
@@ -20,6 +24,9 @@ class LoginVC: UIViewController {
     var password: String? {
         return loginView.passwordTextField.text
     }
+    
+    weak var delegate: LoginVCDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -27,8 +34,11 @@ class LoginVC: UIViewController {
         layout()
     }
     
+   
+    
     
 }
+
 extension LoginVC {
     private func style() {
         subTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -119,8 +129,9 @@ extension LoginVC {
             return
         }
         
-        if username == "Ethan" && password == "password" {
+        if username == "1" && password == "1" {
             signInButton.configuration?.showsActivityIndicator = true
+            delegate?.didLogin()
         } else {
             configureView("Incorrect username / password ")
         }
@@ -133,3 +144,6 @@ extension LoginVC {
     }
     
 }
+
+
+ 
